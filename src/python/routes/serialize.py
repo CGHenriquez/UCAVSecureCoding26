@@ -2,7 +2,7 @@
 # CODIGO SEGURO
 import json
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, field_validator
 
 router = APIRouter()
 
