@@ -17,25 +17,20 @@ import java.io.ByteArrayInputStream;
 @RequestMapping("/api/xml")
 public class XmlController {
 
-    // VULNERABLE (punto de inicio del ejercicio):
-    // @PostMapping("/parse")
-    // public ResponseEntity<?> parseXml(@RequestBody String xmlInput) throws Exception {
-    //     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    //     DocumentBuilder builder = factory.newDocumentBuilder();
-    //     Document doc = builder.parse(new ByteArrayInputStream(xmlInput.getBytes()));
-    //     return ResponseEntity.ok(doc.getDocumentElement().getTagName());
-    // }
-    //
-    // Un atacante puede enviar:
-    // <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/passwd">]>
-    // <data>&xxe;</data>
-    // El servidor leera /etc/passwd y lo incluira en la respuesta.
+// CODIGO SEGURO
+DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-    @PostMapping("/parse")
-    public ResponseEntity<?> parseXml(@RequestBody String xmlInput) throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(new ByteArrayInputStream(xmlInput.getBytes()));
-        return ResponseEntity.ok(doc.getDocumentElement().getTagName());
-    }
-}
+// Deshabilitar DOCTYPE completamente (opcion mas segura)
+factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+
+// Por si acaso: deshabilitar entidades externas generales y de parametro
+factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+
+// Deshabilitar carga de DTD externas y XInclude
+factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+factory.setXIncludeAware(false);
+factory.setExpandEntityReferences(false);
+
+DocumentBuilder builder = factory.newDocumentBuilder();
+Document doc = builder.parse(new InputSource(new StringReader(xml)));
