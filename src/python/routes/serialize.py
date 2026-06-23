@@ -1,6 +1,4 @@
 # src/python/routes/serialize.py
-# PASO 4: Insecure Deserialization — usar JSON con schema validado en lugar de pickle
-
 # CODIGO SEGURO
 import json
 from fastapi import APIRouter, HTTPException
