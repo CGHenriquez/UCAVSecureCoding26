@@ -1,6 +1,4 @@
 // src/java/src/main/java/com/example/api/controller/RedirectController.java
-// PASO 7: Open Redirect — allowlist de destinos de redireccion
-
 package com.example.api.controller;
 
 import org.springframework.stereotype.Controller;
