@@ -1,10 +1,14 @@
 // src/java/src/main/java/com/example/api/controller/RedirectController.java
 package com.example.api.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+El marcador ya está. El problema restante parece de guardado/commit/rama.
 
 // CODIGO SEGURO
 @Controller
