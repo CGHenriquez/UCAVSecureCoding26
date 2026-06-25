@@ -5,32 +5,34 @@
 package handlers
 
 import (
-    "net/http"
-    "strings"
+	"net/http"
+	"strings"
 )
 
 var allowedRedirects = map[string]bool{
-    "/home":      true,
-    "/dashboard": true,
-    "/profile":   true,
+	"/home":      true,
+	"/dashboard": true,
+	"/profile":   true,
 }
 
 // sanitizeHeaderValue elimina caracteres de control del valor de un header
 func sanitizeHeaderValue(value string) string {
-    value = strings.ReplaceAll(value, "\r", "")
-    value = strings.ReplaceAll(value, "\n", "")
-    return value
+	if strings.ContainsAny(value, "\r\n") {
+		value = strings.ReplaceAll(value, "\r", "")
+		value = strings.ReplaceAll(value, "\n", "")
+	}
+	return value
 }
 
 func RedirectHandler(w http.ResponseWriter, r *http.Request) {
-    next := r.URL.Query().Get("next")
-    safe := sanitizeHeaderValue(next)
+	next := r.URL.Query().Get("next")
+	safe := sanitizeHeaderValue(next)
 
-    // Allowlist: solo redirigir a rutas internas conocidas
-    if !allowedRedirects[safe] {
-        safe = "/home"
-    }
+	// Allowlist: solo redirigir a rutas internas conocidas
+	if !allowedRedirects[safe] {
+		safe = "/home"
+	}
 
-    w.Header().Set("Location", safe)
-    w.WriteHeader(http.StatusFound)
+	w.Header().Set("Location", safe)
+	w.WriteHeader(http.StatusFound)
 }
